@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -33,6 +34,8 @@ export default function LoginPage() {
       await api.post("/users/login", formData, {
         withCredentials: true,
       });
+
+      window.dispatchEvent(new Event("auth-change"));
 
       router.push("/dashboard");
     } catch (error) {

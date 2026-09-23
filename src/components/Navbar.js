@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -9,10 +10,19 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const fetchUser = async () => {
+    try {
+      const response = await api.get("/users/profile");
+      setUser(response.data?.user || null);
+    } catch (error) {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
-    const fetchUser = async () => {
+    const loadUser = async () => {
       try {
         const response = await api.get("/users/profile");
 
@@ -26,10 +36,17 @@ export default function Navbar() {
       }
     };
 
-    fetchUser();
+    loadUser();
+
+    const handleAuthChange = () => {
+      fetchUser();
+    };
+
+    window.addEventListener("auth-change", handleAuthChange);
 
     return () => {
       mounted = false;
+      window.removeEventListener("auth-change", handleAuthChange);
     };
   }, []);
 
@@ -52,7 +69,6 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur md:px-8">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-slate-900"
@@ -61,7 +77,6 @@ export default function Navbar() {
           VYORA
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
           <Link
             href="/"
@@ -138,7 +153,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           type="button"
           onClick={() => setMenuOpen((prev) => !prev)}
@@ -150,7 +164,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {menuOpen && (
         <div className="absolute right-4 top-full mt-3 w-64 rounded-xl border border-slate-200 bg-white p-3 shadow-lg md:hidden">
           <div className="flex flex-col gap-1">
