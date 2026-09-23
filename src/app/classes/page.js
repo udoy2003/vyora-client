@@ -42,7 +42,7 @@ export default function ClassesPage() {
       }
 
       const response = await fetch(
-       `${API_URL}/workouts/public?${params.toString()}`
+       `${API_URL}/workouts/public?${params.toString()}`,
         {
           credentials: "include",
         }
