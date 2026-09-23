@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { BriefcaseBusiness, Send, CheckCircle2 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function TrainerApplicationPage() {
   const [experience, setExperience] = useState("");
@@ -20,23 +20,17 @@ export default function TrainerApplicationPage() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        `${API_URL}/api/users/profile`,
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${API_URL}/users/profile`, {
+        credentials: "include",
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.message || "Failed to load profile"
-        );
+        throw new Error(data.message || "Failed to load profile");
       }
 
-      const application =
-        data.user?.trainerApplication || {};
+      const application = data.user?.trainerApplication || {};
 
       setExperience(application.experience || "");
       setSpecialty(application.specialty || "");
@@ -44,10 +38,7 @@ export default function TrainerApplicationPage() {
       setFeedback(application.feedback || "");
     } catch (err) {
       console.error("Load profile error:", err);
-
-      setError(
-        err.message || "Failed to load profile"
-      );
+      setError(err.message || "Failed to load profile");
     } finally {
       setLoading(false);
     }
@@ -64,9 +55,7 @@ export default function TrainerApplicationPage() {
     setMessage("");
 
     if (!experience.trim() || !specialty.trim()) {
-      setError(
-        "Experience and specialty are required."
-      );
+      setError("Experience and specialty are required.");
       return;
     }
 
@@ -74,7 +63,7 @@ export default function TrainerApplicationPage() {
       setSubmitting(true);
 
       const response = await fetch(
-        `${API_URL}/api/users/trainer-application`,
+        `${API_URL}/users/trainer-application`,
         {
           method: "POST",
           credentials: "include",
@@ -92,8 +81,7 @@ export default function TrainerApplicationPage() {
 
       if (!response.ok) {
         throw new Error(
-          data.message ||
-            "Failed to submit trainer application"
+          data.message || "Failed to submit trainer application"
         );
       }
 
@@ -103,14 +91,10 @@ export default function TrainerApplicationPage() {
         "Your trainer application has been submitted successfully."
       );
     } catch (err) {
-      console.error(
-        "Submit trainer application error:",
-        err
-      );
+      console.error("Submit trainer application error:", err);
 
       setError(
-        err.message ||
-          "Failed to submit trainer application"
+        err.message || "Failed to submit trainer application"
       );
     } finally {
       setSubmitting(false);
@@ -155,8 +139,7 @@ export default function TrainerApplicationPage() {
             </h1>
 
             <p className="mt-4 text-slate-400">
-              Your application is currently under
-              review.
+              Your application is currently under review.
             </p>
           </div>
         </section>
@@ -172,9 +155,8 @@ export default function TrainerApplicationPage() {
             </h2>
 
             <p className="mx-auto mt-3 max-w-lg text-slate-500">
-              Your trainer application has been
-              submitted and is waiting for an admin
-              to review it.
+              Your trainer application has been submitted
+              and is waiting for an admin to review it.
             </p>
 
             <div className="mt-6 rounded-xl bg-slate-50 p-5 text-left">
@@ -260,9 +242,8 @@ export default function TrainerApplicationPage() {
           </h1>
 
           <p className="mt-4 max-w-2xl text-slate-400">
-            Share your fitness experience and
-            specialty. An admin will review your
-            application.
+            Share your fitness experience and specialty.
+            An admin will review your application.
           </p>
         </div>
       </section>
@@ -293,10 +274,7 @@ export default function TrainerApplicationPage() {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-6"
-          >
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="mb-2 block text-sm font-semibold text-slate-700">
                 Fitness Specialty
@@ -305,9 +283,7 @@ export default function TrainerApplicationPage() {
               <input
                 type="text"
                 value={specialty}
-                onChange={(e) =>
-                  setSpecialty(e.target.value)
-                }
+                onChange={(e) => setSpecialty(e.target.value)}
                 placeholder="e.g. Strength Training, Yoga, Cardio"
                 className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               />
@@ -320,9 +296,7 @@ export default function TrainerApplicationPage() {
 
               <textarea
                 value={experience}
-                onChange={(e) =>
-                  setExperience(e.target.value)
-                }
+                onChange={(e) => setExperience(e.target.value)}
                 rows={7}
                 placeholder="Describe your fitness training experience, certifications, previous work, achievements, etc."
                 className="w-full resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
