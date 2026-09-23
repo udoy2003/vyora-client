@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ import {
   Layers3,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const emptyForm = {
   title: "",
@@ -44,7 +43,7 @@ export default function TrainerClassesPage() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(`${API_URL}/api/workouts`, {
+      const response = await fetch(`${API_URL}/workouts`, {
         credentials: "include",
       });
 
@@ -145,8 +144,8 @@ export default function TrainerClassesPage() {
       const isEditing = Boolean(editingId);
 
       const url = isEditing
-        ? `${API_URL}/api/workouts/${editingId}`
-        : `${API_URL}/api/workouts`;
+        ? `${API_URL}/workouts/${editingId}`
+        : `${API_URL}/workouts`;
 
       const response = await fetch(url, {
         method: isEditing ? "PUT" : "POST",
@@ -201,7 +200,7 @@ export default function TrainerClassesPage() {
       setMessage("");
 
       const response = await fetch(
-        `${API_URL}/api/workouts/${workout._id}`,
+        `${API_URL}/workouts/${workout._id}`,
         {
           method: "DELETE",
           credentials: "include",

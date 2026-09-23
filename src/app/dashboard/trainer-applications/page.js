@@ -11,7 +11,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function TrainerApplicationsPage() {
   const [applications, setApplications] = useState([]);
@@ -25,7 +25,7 @@ export default function TrainerApplicationsPage() {
       setError("");
 
       const response = await fetch(
-        `${API_URL}/api/users/admin/trainer-applications`,
+        `${API_URL}/users/admin/trainer-applications`,
         {
           method: "GET",
           credentials: "include",
@@ -89,7 +89,7 @@ export default function TrainerApplicationsPage() {
       setUpdatingId(application._id);
 
       const response = await fetch(
-        `${API_URL}/api/users/admin/trainer-applications/${application._id}`,
+        `${API_URL}/users/admin/trainer-applications/${application._id}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -214,7 +214,6 @@ export default function TrainerApplicationsPage() {
           </div>
         )}
 
-        {/* Summary */}
         <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
@@ -276,7 +275,6 @@ export default function TrainerApplicationsPage() {
                   key={application._id}
                   className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
                 >
-                  {/* Card Header */}
                   <div className="border-b border-slate-100 p-6">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-4">
@@ -319,7 +317,6 @@ export default function TrainerApplicationsPage() {
                     </div>
                   </div>
 
-                  {/* Application Details */}
                   <div className="space-y-5 p-6">
                     <div className="flex items-start gap-3">
                       <div className="mt-0.5 text-emerald-500">
@@ -376,7 +373,6 @@ export default function TrainerApplicationsPage() {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="flex gap-3 border-t border-slate-100 bg-slate-50 p-6">
                     <button
                       onClick={() =>

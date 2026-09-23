@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function MyBookingsPage() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function MyBookingsPage() {
         setError("");
 
         const response = await fetch(
-          `${API_URL}/api/bookings/my`,
+          `${API_URL}/bookings/my`,
           {
             credentials: "include",
           }

@@ -8,7 +8,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -25,7 +25,7 @@ export default function AdminUsersPage() {
       setError("");
 
       const response = await fetch(
-        `${API_URL}/api/users/admin/users`,
+        `${API_URL}/users/admin/users`,
         {
           method: "GET",
           credentials: "include",
@@ -79,7 +79,7 @@ export default function AdminUsersPage() {
       setUpdatingId(user._id);
 
       const response = await fetch(
-        `${API_URL}/api/users/admin/users/${user._id}/status`,
+        `${API_URL}/users/admin/users/${user._id}/status`,
         {
           method: "PATCH",
           credentials: "include",
@@ -142,7 +142,7 @@ export default function AdminUsersPage() {
       setUpdatingId(user._id);
 
       const response = await fetch(
-        `${API_URL}/api/users/admin/users/${user._id}/role`,
+        `${API_URL}/users/admin/users/${user._id}/role`,
         {
           method: "PATCH",
           credentials: "include",

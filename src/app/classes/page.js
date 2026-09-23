@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ClassesPage() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function ClassesPage() {
       }
 
       const response = await fetch(
-        `${API_URL}/api/workouts/public?${params.toString()}`,
+       `${API_URL}/workouts/public?${params.toString()}`
         {
           credentials: "include",
         }

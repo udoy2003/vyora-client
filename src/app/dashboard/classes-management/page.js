@@ -10,7 +10,7 @@ import {
   Clock3,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AdminClassesPage() {
   const [classes, setClasses] = useState([]);
@@ -26,7 +26,7 @@ export default function AdminClassesPage() {
       setError("");
 
       const response = await fetch(
-        `${API_URL}/api/workouts/admin/all`,
+        `${API_URL}/workouts/admin/all`,
         {
           credentials: "include",
         }
@@ -74,7 +74,7 @@ export default function AdminClassesPage() {
       setMessage("");
 
       const response = await fetch(
-        `${API_URL}/api/workouts/admin/${workout._id}/status`,
+        `${API_URL}/workouts/admin/${workout._id}/status`,
         {
           method: "PATCH",
           credentials: "include",
@@ -138,7 +138,7 @@ export default function AdminClassesPage() {
       setMessage("");
 
       const response = await fetch(
-        `${API_URL}/api/workouts/admin/${workout._id}`,
+        `${API_URL}/workouts/admin/${workout._id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -279,7 +279,6 @@ export default function AdminClassesPage() {
           </div>
         )}
 
-        {/* Summary */}
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">
@@ -371,12 +370,10 @@ export default function AdminClassesPage() {
                 <tbody className="divide-y divide-slate-100">
                   {classes.map((workout) => {
                     const isUpdating =
-                      updatingId ===
-                      workout._id;
+                      updatingId === workout._id;
 
                     const isDeleting =
-                      deletingId ===
-                      workout._id;
+                      deletingId === workout._id;
 
                     return (
                       <tr
@@ -472,9 +469,7 @@ export default function AdminClassesPage() {
 
                             <button
                               onClick={() =>
-                                deleteClass(
-                                  workout
-                                )
+                                deleteClass(workout)
                               }
                               disabled={
                                 isUpdating ||
@@ -482,9 +477,7 @@ export default function AdminClassesPage() {
                               }
                               className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
                             >
-                              <Trash2
-                                size={15}
-                              />
+                              <Trash2 size={15} />
 
                               {isDeleting
                                 ? "Deleting..."

@@ -19,7 +19,7 @@ export default function ProfilePage() {
           return;
         }
 
-        const response = await api.get("/api/users/profile", {
+        const response = await api.get("/users/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
