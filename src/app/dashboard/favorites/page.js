@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Clock, Dumbbell, Heart, Search } from "lucide-react";
 import { motion } from "framer-motion";
-import api from "../../../../../../lib/api";
+import api from "../../../../lib/api";
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
