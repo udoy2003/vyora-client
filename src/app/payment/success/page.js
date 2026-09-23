@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   CheckCircle2,
@@ -11,7 +11,7 @@ import {
 import { motion } from "framer-motion";
 import api from "../../../../lib/api";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -29,18 +29,14 @@ export default function PaymentSuccessPage() {
 
     const verifyPayment = async () => {
       try {
-        const response = await api.post(
-          "/bookings/verify-payment",
-          {
-            sessionId,
-          }
-        );
+        const response = await api.post("/bookings/verify-payment", {
+          sessionId,
+        });
 
         if (!response.data?.success) {
           setStatus("error");
           setMessage(
-            response.data?.message ||
-              "Payment verification failed."
+            response.data?.message || "Payment verification failed."
           );
           return;
         }
@@ -68,13 +64,12 @@ export default function PaymentSuccessPage() {
   }, [searchParams, router]);
 
   return (
-    <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg rounded-3xl bg-white p-8 text-center shadow-xl sm:p-10"
       >
-        {/* Processing */}
         {status === "processing" && (
           <>
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
@@ -85,9 +80,7 @@ export default function PaymentSuccessPage() {
               Verifying Payment
             </h1>
 
-            <p className="mt-3 text-slate-600">
-              {message}
-            </p>
+            <p className="mt-3 text-slate-600">{message}</p>
 
             <p className="mt-4 text-sm text-slate-400">
               Please do not close this page.
@@ -95,7 +88,6 @@ export default function PaymentSuccessPage() {
           </>
         )}
 
-        {/* Success */}
         {status === "success" && (
           <>
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
@@ -106,15 +98,11 @@ export default function PaymentSuccessPage() {
               Payment Successful
             </h1>
 
-            <p className="mt-3 leading-7 text-slate-600">
-              {message}
-            </p>
+            <p className="mt-3 leading-7 text-slate-600">{message}</p>
 
             <div className="mt-8 space-y-3">
               <button
-                onClick={() =>
-                  router.push("/dashboard/bookings")
-                }
+                onClick={() => router.push("/dashboard/bookings")}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-4 font-bold text-white transition hover:bg-slate-800"
               >
                 <CalendarCheck2 className="h-5 w-5" />
@@ -132,7 +120,6 @@ export default function PaymentSuccessPage() {
           </>
         )}
 
-        {/* Error */}
         {status === "error" && (
           <>
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
@@ -143,9 +130,7 @@ export default function PaymentSuccessPage() {
               Payment Verification Failed
             </h1>
 
-            <p className="mt-3 leading-7 text-slate-600">
-              {message}
-            </p>
+            <p className="mt-3 leading-7 text-slate-600">{message}</p>
 
             <button
               onClick={() => router.push("/classes")}
@@ -157,5 +142,26 @@ export default function PaymentSuccessPage() {
         )}
       </motion.div>
     </main>
+  );
+}
+
+function PaymentSuccessFallback() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
+      <div className="flex items-center gap-3 rounded-2xl bg-white px-6 py-5 shadow-lg">
+        <Loader2 className="h-6 w-6 animate-spin text-slate-700" />
+        <span className="font-semibold text-slate-700">
+          Loading payment status...
+        </span>
+      </div>
+    </main>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<PaymentSuccessFallback />}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }
